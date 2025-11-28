@@ -137,8 +137,8 @@ rad_r_mat2 = ctk.CTkRadioButton(
     variable=selected_option,
     value="2",
 )
-rad_r_mat.grid(row=2, column=1, sticky="w")
-rad_r_mat2.grid(row=3, column=1, sticky="w")
+rad_r_mat.grid(row=2, column=1)
+rad_r_mat2.grid(row=3, column=1)
 
 lbl_s = ctk.CTkLabel(frame, text="Сечение кабеля (мм2):")
 lbl_s.grid(row=4, column=0, sticky="w")
