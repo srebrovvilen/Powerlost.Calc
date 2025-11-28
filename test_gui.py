@@ -90,7 +90,7 @@ ctk.set_default_color_theme("dark-blue")
 root = ctk.CTk()
 try:
     root.wm_iconbitmap()
-    icon = ImageTk.PhotoImage(Image.open("ee_.png"))
+    icon = ImageTk.PhotoImage(Image.open("img/ee_.png"))
     root.iconphoto(False, icon)
 except FileNotFoundError:
     print("Icon file not found. Used the default.")
