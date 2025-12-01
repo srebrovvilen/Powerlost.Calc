@@ -57,21 +57,20 @@ def calculate():
         lost_percent = 100
 
     if lost_percent >= 10:
-        lbl_res.configure(text_color="red")
         lbl_res_2.configure(text_color="red")
     else:
-        lbl_res.configure(text_color="green")
         lbl_res_2.configure(text_color="green")
 
-    lbl_res.configure(
+    lbl_res_2.configure(
         text="⬤ Потери на расстоянии "
         + str(l)
         + " м составят: "
         + str(round(lost_percent, 2))
         + " процентов (%)"
-    )
-    lbl_res_2.configure(
-        text="⬤ Итоговое напряжение в сети: " + str(round(U_min, 2)) + " В"
+        + "\n"
+        + "⬤ Итоговое напряжение в сети: "
+        + str(round(U_min, 2))
+        + " В"
     )
 
 
@@ -80,7 +79,6 @@ def clear():
     txt_s.delete(0, ctk.END)
     txt_i.delete(0, ctk.END)
     txt_U.delete(0, ctk.END)
-    lbl_res.configure(text="")
     lbl_res_2.configure(text="")
     selected_option.set(1)
 
@@ -101,7 +99,7 @@ try:
 except FileNotFoundError:
     print("Icon file not found. Used the default.")
 root.title("Powerlost.Calc")
-root.geometry("420x380")
+root.geometry("420x410")
 root.resizable(False, False)
 
 frame = ctk.CTkFrame(master=root, fg_color="transparent")
@@ -167,10 +165,19 @@ btn_res.grid(row=7, column=0, sticky="e")
 btn_res = ctk.CTkButton(frame, text="Вычислить", command=calculate)
 btn_res.grid(row=7, column=1)
 
-lbl_res = ctk.CTkLabel(frame, text="")
-lbl_res.grid(row=8, column=0, columnspan=2, sticky="w", pady=(10, 0))
+lbl_res = ctk.CTkLabel(frame, anchor="w", text="Результат ↓")
+lbl_res.grid(row=8, column=0, columnspan=2, sticky="w")
 
-lbl_res_2 = ctk.CTkLabel(frame, text="")
+lbl_res_2 = ctk.CTkLabel(
+    frame,
+    justify="left",
+    anchor="w",
+    corner_radius=8,
+    fg_color=("white", "grey20"),
+    width=400,
+    height=60,
+    text="",
+)
 lbl_res_2.grid(row=9, column=0, columnspan=2, sticky="w", pady=(0, 10))
 
 switch_var = ctk.StringVar()
