@@ -84,6 +84,12 @@ def clear():
     lbl_res_2.configure(text="")
     selected_option.set(1)
 
+
+def switch_theme():
+    new_appearance_mode = switch_var.get()
+    ctk.set_appearance_mode(new_appearance_mode)
+
+
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("dark-blue")
 
@@ -95,7 +101,7 @@ try:
 except FileNotFoundError:
     print("Icon file not found. Used the default.")
 root.title("Powerlost.Calc")
-root.geometry("420x350")
+root.geometry("420x380")
 root.resizable(False, False)
 
 frame = ctk.CTkFrame(master=root, fg_color="transparent")
@@ -166,5 +172,16 @@ lbl_res.grid(row=8, column=0, columnspan=2, sticky="w", pady=(10, 0))
 
 lbl_res_2 = ctk.CTkLabel(frame, text="")
 lbl_res_2.grid(row=9, column=0, columnspan=2, sticky="w", pady=(0, 10))
+
+switch_var = ctk.StringVar()
+switch_1 = ctk.CTkSwitch(
+    frame,
+    text="🌙",
+    onvalue="dark",
+    offvalue="light",
+    variable=switch_var,
+    command=switch_theme,
+)
+switch_1.grid(row=10, column=1, sticky="e")
 
 root.mainloop()
