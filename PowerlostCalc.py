@@ -115,7 +115,7 @@ frame.pack()
 hello = ctk.CTkLabel(
     frame,
     text="""Добро пожаловать в программу расчета падения напряжения
-от длинны и сечения кабеля 💀💀💀""",
+от длинны и сечения кабеля 🔥🧯🚒""",
 )
 hello.grid(row=0, column=0, columnspan=2, sticky="n", pady=(20, 20))
 
