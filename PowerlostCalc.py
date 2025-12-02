@@ -5,14 +5,15 @@ from PIL import ImageTk, Image
 
 def calculate():
     R_mat = selected_option.get()
-    l = txt_l.get()
+    L = txt_l.get()
     S = txt_s.get()
     I = txt_i.get()
     U = txt_U.get()
     N = input_number.get()
     R = input_resistor.get()
+    all_variables = [R_mat, L, S, U, N, R]
 
-    if not R_mat or not l or not S or not I or not U or not N or not R:
+    if not all(all_variables):
         CTkMessagebox(
             title="Ошибка!",
             message="Все поля должны быть заполнены!",
@@ -22,14 +23,9 @@ def calculate():
         )
         return
 
-    if (
-        not R_mat.isdigit()
-        or not l.isdigit()
-        or not S.replace(".", "").isdigit()
-        or not I.isdigit()
-        or not U.isdigit()
-        or not N.isdigit()
-        or not R.isdigit()
+    if not all(
+        v.isdigit() if v != S else v.replace(".", "", 1).isdigit()
+        for v in all_variables
     ):
         CTkMessagebox(
             title="Ошибка!",
@@ -41,19 +37,19 @@ def calculate():
         return
 
     R_mat = int(R_mat)
-    l = int(l)
+    L = int(L)
     S = float(S)
     I = int(I)
     U = int(U)
     N = int(N)
-    R = U / int(R)
+    R = int(R)
 
     if R_mat == 1:
         R_mat = 0.0175
     elif R_mat == 2:
         R_mat = 0.0295
 
-    U_lost = ((R_mat * (l * 2)) / S) * (((I * 10 ** (-3)) + R) * N)
+    U_lost = ((R_mat * (L * 2)) / S) * (((I * 10 ** (-3)) + (U / R)) * N)
     U_min = U - U_lost
     lost_percent = (U_lost / U) * 100
 
@@ -68,7 +64,7 @@ def calculate():
 
     lbl_res_2.configure(
         text="⬤ Потери на расстоянии "
-        + str(l)
+        + str(L)
         + " м составят: "
         + str(round(lost_percent, 2))
         + " процентов (%)"
@@ -80,12 +76,10 @@ def calculate():
 
 
 def clear():
-    txt_l.delete(0, ctk.END)
-    txt_s.delete(0, ctk.END)
-    txt_i.delete(0, ctk.END)
-    txt_U.delete(0, ctk.END)
-    input_number.delete(0, ctk.END)
-    input_resistor.delete(0, ctk.END)
+    cleared = [txt_l, txt_s, txt_i, txt_U, input_number, input_resistor]
+    for inputs in cleared:
+        inputs.delete(0, ctk.END)
+
     lbl_res_2.configure(text="")
     selected_option.set(1)
 
