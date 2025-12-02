@@ -9,9 +9,10 @@ def calculate():
     S = txt_s.get()
     I = txt_i.get()
     U = txt_U.get()
-    s = S.replace(".", "")
+    N = input_number.get()
+    R = input_resistor.get()
 
-    if not R_mat or not l or not S or not I or not U:
+    if not R_mat or not l or not S or not I or not U or not N or not R:
         CTkMessagebox(
             title="Ошибка!",
             message="Все поля должны быть заполнены!",
@@ -24,9 +25,11 @@ def calculate():
     if (
         not R_mat.isdigit()
         or not l.isdigit()
-        or not s.isdigit()
+        or not S.replace(".", "").isdigit()
         or not I.isdigit()
         or not U.isdigit()
+        or not N.isdigit()
+        or not R.isdigit()
     ):
         CTkMessagebox(
             title="Ошибка!",
@@ -42,13 +45,15 @@ def calculate():
     S = float(S)
     I = int(I)
     U = int(U)
+    N = int(N)
+    R = U / int(R)
 
     if R_mat == 1:
         R_mat = 0.0175
     elif R_mat == 2:
         R_mat = 0.0295
 
-    U_lost = ((R_mat * (l * 2)) / S) * I
+    U_lost = ((R_mat * (l * 2)) / S) * (((I * 10 ** (-3)) + R) * N)
     U_min = U - U_lost
     lost_percent = (U_lost / U) * 100
 
@@ -79,6 +84,8 @@ def clear():
     txt_s.delete(0, ctk.END)
     txt_i.delete(0, ctk.END)
     txt_U.delete(0, ctk.END)
+    input_number.delete(0, ctk.END)
+    input_resistor.delete(0, ctk.END)
     lbl_res_2.configure(text="")
     selected_option.set(1)
 
@@ -99,7 +106,7 @@ try:
 except FileNotFoundError:
     print("Icon file not found. Used the default.")
 root.title("Powerlost.Calc")
-root.geometry("420x410")
+root.geometry("420x460")
 root.resizable(False, False)
 
 frame = ctk.CTkFrame(master=root, fg_color="transparent")
@@ -149,24 +156,34 @@ lbl_s.grid(row=4, column=0, sticky="w")
 txt_s = ctk.CTkEntry(frame, width=100)
 txt_s.grid(row=4, column=1)
 
-lbl_i = ctk.CTkLabel(frame, text="Предпологаемый ток нагрузки (А):")
+lbl_i = ctk.CTkLabel(frame, text="Ток нагрузки одного устройства (мА):")
 lbl_i.grid(row=5, column=0, sticky="w")
 txt_i = ctk.CTkEntry(frame, width=100)
 txt_i.grid(row=5, column=1)
 
+label_number = ctk.CTkLabel(frame, text="Количество устройств в цепи (шт):")
+label_number.grid(row=6, column=0, sticky="w")
+input_number = ctk.CTkEntry(frame, width=100)
+input_number.grid(row=6, column=1)
+
+label_resistor = ctk.CTkLabel(frame, text="Сопротивление оконечного резистора (Ом):")
+label_resistor.grid(row=7, column=0, sticky="w")
+input_resistor = ctk.CTkEntry(frame, width=100)
+input_resistor.grid(row=7, column=1)
+
 lbl_l = ctk.CTkLabel(frame, text="Длина линии (м):")
-lbl_l.grid(row=6, column=0, sticky="w")
+lbl_l.grid(row=8, column=0, sticky="w")
 txt_l = ctk.CTkEntry(frame, width=100)
-txt_l.grid(row=6, column=1, pady=(0, 10))
+txt_l.grid(row=8, column=1, pady=(0, 10))
 
 btn_res = ctk.CTkButton(frame, text="Сброс", command=clear)
-btn_res.grid(row=7, column=0, sticky="e")
+btn_res.grid(row=9, column=0, sticky="e")
 
 btn_res = ctk.CTkButton(frame, text="Вычислить", command=calculate)
-btn_res.grid(row=7, column=1)
+btn_res.grid(row=9, column=1)
 
 lbl_res = ctk.CTkLabel(frame, anchor="w", text="Результат ↓")
-lbl_res.grid(row=8, column=0, columnspan=2, sticky="w")
+lbl_res.grid(row=10, column=0, columnspan=2, sticky="w")
 
 lbl_res_2 = ctk.CTkLabel(
     frame,
@@ -178,7 +195,7 @@ lbl_res_2 = ctk.CTkLabel(
     height=60,
     text="",
 )
-lbl_res_2.grid(row=9, column=0, columnspan=2, sticky="w", pady=(0, 10))
+lbl_res_2.grid(row=11, column=0, columnspan=2, sticky="w", pady=(0, 10))
 
 switch_var = ctk.StringVar()
 switch_1 = ctk.CTkSwitch(
@@ -189,6 +206,6 @@ switch_1 = ctk.CTkSwitch(
     variable=switch_var,
     command=switch_theme,
 )
-switch_1.grid(row=10, column=1, sticky="e")
+switch_1.grid(row=12, column=1, sticky="e")
 
 root.mainloop()
